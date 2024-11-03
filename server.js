@@ -2,16 +2,17 @@ import express from "express";
 import mongoose from "mongoose";
 import shortUrl from "./model/shortStore.js";
 import cors from "cors";
+import dotenv from "dotenv";
 
+
+dotenv.config();
 const app = express();
 
-mongoose.connect(
-  "mongodb+srv://satwikakundi:QbsONuLq9UmNlgh2@projects.cbiwf.mongodb.net/",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 
 // Use CORS to allow cross-origin resource sharing for all routes
 app.use(cors({
@@ -42,8 +43,6 @@ app.get("/:shortUrl", async (req, res) => {
   res.redirect(`${short.full}`);
 });
 
-let port = process.env.PORT || 5001;
+const port = process.env.PORT || 5001;
+app.listen(port, () => console.log(`Server started on port ${port}`));
 
-app.listen(port, function () {
-  console.log("Server started successfully on port: ", port);
-});
